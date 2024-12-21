@@ -1,7 +1,11 @@
 import icons from '@/constants/icons';
 import images from '@/constants/images';
+import { useUserContext } from '@/context/user-provider';
+import { login } from '@/lib/appwrite';
+import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
+	Alert,
 	Image,
 	SafeAreaView,
 	ScrollView,
@@ -10,8 +14,25 @@ import {
 	View
 } from 'react-native';
 
-const SignIn = () => {
-	const handleLogin = () => {};
+const Auth = () => {
+	const { refetch, loading, user } = useUserContext();
+	const handleLogin = async () => {
+		// const result = await login();
+
+		// if (result) {
+		// 	refetch();
+		// } else {
+		// 	Alert.alert('Error', 'Failed to login');
+		// }
+		const uri = await login();
+		console.log(`debug: uri =>`, uri);
+		if (!uri) return null;
+		let result = await WebBrowser.openAuthSessionAsync(uri);
+		console.log(`debug: result from sign in =>`, result);
+		return result;
+	};
+
+	console.log(`debug: user from sign in =>`, user);
 
 	return (
 		<SafeAreaView className='bg-white h-full'>
@@ -30,7 +51,7 @@ const SignIn = () => {
 						{`Let's get You Closer to `}
 						<Text className='text-primary-300'>Your Ideal Home</Text>
 					</Text>
-					
+
 					<Text className='text-lg font-rubik text-black-200 text-center mt-12'>
 						Login to ReEstate with Google
 					</Text>
@@ -56,4 +77,4 @@ const SignIn = () => {
 	);
 };
 
-export default SignIn;
+export default Auth;

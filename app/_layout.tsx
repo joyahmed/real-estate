@@ -1,3 +1,4 @@
+import UserProvider from '@/context/user-provider';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
@@ -20,5 +21,9 @@ export default function RootLayout() {
 	}, [fontsLoaded]);
 
 	if (!fontsLoaded) return null;
-	return <Stack screenOptions={{ headerShown: false }} />;
+	return (
+		<UserProvider>
+			<Stack screenOptions={{ headerShown: false }} />
+		</UserProvider>
+	);
 }
